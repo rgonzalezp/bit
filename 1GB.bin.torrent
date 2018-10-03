@@ -1,0 +1,9 @@
+{
+	"info": {
+		"filename": "1GB.bin",
+		"fileLength": 1048576000,
+		"pieceLength": 256000,
+		"pieces": []
+	},
+	"announce": "157.253.228.233:6789"
+}
