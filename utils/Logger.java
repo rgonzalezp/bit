@@ -1,9 +1,6 @@
 package utils;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.PrintWriter;
 
 /**
@@ -24,7 +21,6 @@ public class Logger {
 			output = new PrintWriter(new FileWriter("./data/log.txt",true));
 			output.println("Client " + name + ": " + s);
 			System.out.println("Client " + name + ": " + s);
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -33,16 +29,16 @@ public class Logger {
 	}
 	
 	public void logData(String s){
-	PrintWriter output = null;
-	    
-		try {
-			output = new PrintWriter(new FileWriter("./data/logData.txt",true));
-			output.println(s);
+		PrintWriter output = null;
+		    
+			try {
+				output = new PrintWriter(new FileWriter("./data/logData.txt",true));
+				output.println(s);
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			
-		} catch (Exception e) {
-			e.printStackTrace();
+			output.close();
 		}
-		
-		output.close();
-	}
 }

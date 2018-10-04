@@ -16,8 +16,8 @@ import java.util.concurrent.ConcurrentMap;
 public class Downloader {
 
     private Logger logger;
-
     private long initTime;
+
     public Downloader(Logger logger) {
         this.logger = logger;
     }
@@ -52,8 +52,9 @@ public class Downloader {
     }
 
     public void receiveBitfield(Connection connection, Peer peer, Bitfield bitfield, Datafile datafile) {
+    	initTime = System.currentTimeMillis();
+    	
         logger.log("receive BITFIELD " + bitfield + " from " + peer);
-        initTime = System.currentTimeMillis();
         connection.setBitfield(bitfield);               // set peer's bitfield
         if (!datafile.isCompleted()) {
             MessageSender.sendInterested(connection, peer, logger);
@@ -66,12 +67,12 @@ public class Downloader {
     private void requestFirstAvailPiece(Connection connection, Peer peer, Datafile datafile) {
 		if (datafile.isCompleted()) {
 			long timeDescarga = (System.currentTimeMillis() - initTime)/1000;
+
 			logger.log("Datafile is complete" );
 			logger.log("TIEMPO: " + timeDescarga);
 			logger.log("FECHA: " + LocalDateTime.now());
 			//Fecha,tiempo de descarga, nombre del archivo, tamanio de archivo, numero de chunks, conexion exitosa
-			logger.logData(LocalDateTime.now()+","+timeDescarga+","+datafile.getFilename()+","+datafile.getFileLength()+","+datafile.getNumPieces()+","+"OK");
-			
+			logger.logData(LocalDateTime.now()+","+timeDescarga+","+datafile.getFilename()+","+datafile.getFileLength()+","+datafile.getNumPieces()+","+"La entrega fue exitosa");
 			return;
 		}
 		for (int i = 0; i < datafile.getNumPieces(); i++) {
