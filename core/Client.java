@@ -26,7 +26,7 @@ import java.util.concurrent.*;
  */
 public class Client {
 
-    private static final int NUM_THREADS = 20;
+    private static final int NUM_THREADS = 8;
     private static final int BACKLOG = 10;
     private static final String CMD_USAGE = "NORMAL: java Client name port metafile directory\n" +
             "SHARING: java Client name port file trackerIP trackerPort";
@@ -93,7 +93,7 @@ public class Client {
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(NUM_THREADS);
         executor.scheduleAtFixedRate(new Unchoker(connections, datafile, unchokedPeers, logger), 0, UNCHOKE_INTERVAL, TimeUnit.SECONDS);
         executor.scheduleAtFixedRate(new TrackerTask(trackerClient, datafile.getFilename(), connections, executor, logger),
-                0, Math.max(initResponse.getInterval() * 2000 / 2, 2000), TimeUnit.MILLISECONDS);
+                0, Math.max(initResponse.getInterval() * 1000 / 2, 1000), TimeUnit.MILLISECONDS);
         new Thread(new Welcomer(port, BACKLOG, connections, logger, datafile)).start();
         new Thread(new Responder(connections, unchokedPeers, datafile, executor, logger)).start();
     }

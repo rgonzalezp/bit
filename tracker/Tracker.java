@@ -22,7 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Tracker implements Runnable {
 
 
-    private final static int TIMEOUT = 5; // timeout in seconds
+    private final static int TIMEOUT = 1; // timeout in seconds
     private ServerSocket welcomeSocket;
     private ConcurrentHashMap<String, Set<Peer>> peerLists;
     private ConcurrentHashMap<String, ConcurrentHashMap<Peer, Timer>> timerList;
@@ -30,7 +30,7 @@ public class Tracker implements Runnable {
 
     public Tracker(int port) throws IOException {
         this.welcomeSocket = new ServerSocket(port);
-        this.welcomeSocket.setSoTimeout(5000);
+        this.welcomeSocket.setSoTimeout(1000);
 
         this.peerLists = new ConcurrentHashMap<>();
         this.timerList = new ConcurrentHashMap<>();
