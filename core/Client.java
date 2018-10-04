@@ -9,15 +9,11 @@ import utils.Datafile;
 import utils.Logger;
 import utils.MessageSender;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.NetworkInterface;
 import java.net.Socket;
-import java.net.URI;
-import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
@@ -30,7 +26,7 @@ import java.util.concurrent.*;
  */
 public class Client {
 
-    private static final int NUM_THREADS = 8;
+    private static final int NUM_THREADS = 20;
     private static final int BACKLOG = 10;
     private static final String CMD_USAGE = "NORMAL: java Client name port metafile directory\n" +
             "SHARING: java Client name port file trackerIP trackerPort";
@@ -75,8 +71,8 @@ public class Client {
         ConcurrentMap<Peer, Connection> connections = new ConcurrentHashMap<>();
         ConcurrentHashMap<Peer, Float> unchokedPeers = new ConcurrentHashMap<>();
 
-        // probably shouldn't be local host if running on zoo or something
         InetAddress ip = InetAddress.getLocalHost();
+        
         Enumeration<NetworkInterface> nets = NetworkInterface.getNetworkInterfaces();
         for (NetworkInterface netint : Collections.list(nets))
         {
@@ -97,11 +93,11 @@ public class Client {
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(NUM_THREADS);
         executor.scheduleAtFixedRate(new Unchoker(connections, datafile, unchokedPeers, logger), 0, UNCHOKE_INTERVAL, TimeUnit.SECONDS);
         executor.scheduleAtFixedRate(new TrackerTask(trackerClient, datafile.getFilename(), connections, executor, logger),
-                0, Math.max(initResponse.getInterval() * 1000 / 2, 1000), TimeUnit.MILLISECONDS);
+                0, Math.max(initResponse.getInterval() * 2000 / 2, 2000), TimeUnit.MILLISECONDS);
         new Thread(new Welcomer(port, BACKLOG, connections, logger, datafile)).start();
         new Thread(new Responder(connections, unchokedPeers, datafile, executor, logger)).start();
     }
-    
+
     // Get an initial peer list from the tracker and attempt to initiate connections with all peers.
     private static TrackerResponse getInitialTrackerResponse(TrackerClient trackerClient,
                                                              boolean registerFile,
