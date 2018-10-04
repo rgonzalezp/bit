@@ -1,7 +1,7 @@
 {
 	"info": {
-		"filename": "100MB.bin",
-		"fileLength": 104857600,
+		"filename": "250MB",
+		"fileLength": 262144000,
 		"pieceLength": 256000,
 		"pieces": []
 	},
